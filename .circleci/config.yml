@@ -31,7 +31,7 @@ jobs:
           name: "deploy to QA env" 
           command: echo "Deployed to QA environment with AWS S3 bucket magic or Azure container magic" 
 
-worfklows: 
+workflows: 
   deploy-to-qa: 
     jobs: 
       - unit-tests
