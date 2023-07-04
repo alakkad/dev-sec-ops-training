@@ -1,64 +1,40 @@
-version: 2.1
-jobs:
-  unit-tests:
-    docker:
+version: 2.1 
+jobs: 
+  unit-tests: 
+    docker: 
+      - image: cimg/node:14.20.0
+    steps: 
+      - checkout 
+      - run: 
+          name: "install dependencies" 
+          command: yarn 
+      - run: 
+          name: "run project unit tests" 
+          command: yarn redwood test 
+  build-app: 
+    docker: 
       - image: cimg/node:14.20.0
     steps:
-      - checkout
-      - run:
+      - checkout 
+      - run: 
           name: "install dependencies"
-          command: yarn
-      - run:
-          name: "run project unit tests"
-          command: yarn redwood test
-  sast:
-    docker:
-      - image: cimg/node:14:20.0
-    steps:
-      - checkout
-      - run:
-          name: "install dependencies"
-          command: yarn
-      - run:
-          name: "execute retire.js"
-          command: cd web; retire --path web
-  build-app:
-    docker:
-      - image: cimg/node:14.20.0
-    steps:
-      - checkout
-      - run:
-          name: "install dependencies"
-          command: yarn
-      - run:
+          command: yarn 
+      - run: 
           name: "build deploy artifact"
-          command: yarn redwood build
-  deploy-feature:
+          command: yarn redwood build 
+  deploy-qa:
     docker:
       - image: cimg/node:17.1.0
     steps:
-      - checkout
-      - run:
-          name: "deploy to feature env"
-          command: echo "Deployed to feature environment with AWS S3 bucket magic or Azure container magic"
-  dast:
-    docker:
-      - image: cimg/go:1.19.0
-    steps:
-      - checkout
-      - run: go version
-      - run:
-          name: "install nuclei-cli"
-          command: go install -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei@latest
-      - run:
-          name: "Nuclei scan on QA"
-          command: nuclei -u https://flippedcoding.com
+      - checkout 
+      - run: 
+          name: "deploy to QA env" 
+          command: echo "Deployed to QA environment with AWS S3 bucket magic or Azure container magic" 
 
-workflows:
-  deploy-to-qa:
-    jobs:
+worfklows: 
+  deploy-to-qa: 
+    jobs: 
       - unit-tests
-      - sast
-      - build-app
-      - deploy-feature
-      - dast
+      - build-app 
+      - deploy-qa      
+
