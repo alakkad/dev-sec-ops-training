@@ -21,7 +21,7 @@ jobs:
           command: yarn 
       - run: 
           name: "execute retire.js" 
-          command:  cd web; retire --path web      
+          command: cd web; retire --path web      
   build-app: 
     docker: 
       - image: cimg/node:14.20.0
